@@ -1,12 +1,17 @@
 #!/bin/bash
 
-# Remove any old symbolic links or files from /bin
+# Remove old symbolic links or files from /bin
 if [ -f "/data/data/com.termux/files/usr/bin/cars.txt" ]; then
   rm -f "/data/data/com.termux/files/usr/bin/cars.txt"
 fi
 
 if [ -f "/data/data/com.termux/files/usr/bin/default.txt" ]; then
   rm -f "/data/data/com.termux/files/usr/bin/default.txt"
+fi
+
+# Remove any old symlink for the 'car' script itself, in case it exists
+if [ -L "/data/data/com.termux/files/usr/bin/CAR" ]; then
+  rm -f "/data/data/com.termux/files/usr/bin/CAR"
 fi
 
 # Ensure the repository directory exists
