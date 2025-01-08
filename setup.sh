@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Remove any old symbolic links or files from /bin
+if [ -f "/data/data/com.termux/files/usr/bin/cars.txt" ]; then
+  rm -f "/data/data/com.termux/files/usr/bin/cars.txt"
+fi
+
+if [ -f "/data/data/com.termux/files/usr/bin/default.txt" ]; then
+  rm -f "/data/data/com.termux/files/usr/bin/default.txt"
+fi
+
 # Ensure the repository directory exists
 if [ ! -d "$HOME/MOD-CAR" ]; then
   echo "Cloning the MOD-CAR repository..."
