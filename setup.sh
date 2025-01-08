@@ -1,42 +1,24 @@
 #!/bin/bash
 
-# Remove old installation if it exists
-if [ -d "MOD-CAR" ]; then
-  echo "Removing old MOD-CAR directory..."
-  rm -rf "MOD-CAR"
-fi
-
-if [ -f "/data/data/com.termux/files/usr/bin/CAR" ]; then
-  echo "Removing old symbolic link for CAR..."
-  rm -f "/data/data/com.termux/files/usr/bin/CAR"
-fi
-
-# Clone the repository
-echo "Cloning the repository..."
-git clone https://github.com/darksideyt762/MOD-CAR.git
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to clone the repository. Check your internet connection or repository URL."
+# Ensure the repository directory exists
+if [ ! -d "$HOME/MOD-CAR" ]; then
+  echo "Error: MOD-CAR repository not found. Please clone the repository and try again."
   exit 1
 fi
 
-# Change to the repository directory
-cd "MOD-CAR" || { echo "Error: MOD-CAR directory not found."; exit 1; }
+# Navigate to the repository directory
+cd "$HOME/MOD-CAR" || { echo "Failed to navigate to MOD-CAR directory."; exit 1; }
 
-# Make the main script executable
-if [ -f "car" ]; then
-  chmod +x car
-else
-  echo "Error: 'car' script not found in the repository."
-  exit 1
-fi
-
-# Ensure cars.txt and default.txt exist
+# Ensure cars.txt and default.txt are in the repository
 if [ ! -f "cars.txt" ] || [ ! -f "default.txt" ]; then
   echo "Error: cars.txt or default.txt are missing in the repository."
   exit 1
 fi
 
+# Make the main script executable
+chmod +x car
+
 # Create a symbolic link for the script to be accessible globally as "CAR"
-ln -sf "$(pwd)/car" "/data/data/com.termux/files/usr/bin/CAR"
+ln -sf "$HOME/MOD-CAR/car" /data/data/com.termux/files/usr/bin/CAR
 
 echo "Setup completed successfully! You can now run the script by typing 'CAR'."
