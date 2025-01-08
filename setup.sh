@@ -9,11 +9,11 @@ fi
 cd $HOME/MOD-CAR
 
 # Make sure the script is executable
-chmod +x car.py
+chmod +x car
 
 # Create a symbolic link for the script to be accessible globally as "car"
 if [ ! -L "/data/data/com.termux/files/usr/bin/car" ]; then
-  ln -s $HOME/MOD-CAR/car.py /data/data/com.termux/files/usr/bin/car
+  ln -s $HOME/MOD-CAR/car /data/data/com.termux/files/usr/bin/car
 fi
 
 # Ensure cars.txt and default.txt are in the same directory as the script
