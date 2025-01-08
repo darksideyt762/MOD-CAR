@@ -22,4 +22,7 @@ if [ ! -f "$HOME/MOD-CAR/cars.txt" ] || [ ! -f "$HOME/MOD-CAR/default.txt" ]; th
   exit 1
 fi
 
+# Make the symbolic link executable
+chmod +x /data/data/com.termux/files/usr/bin/car
+
 echo "Setup completed successfully! You can now run the script by typing 'car'."
