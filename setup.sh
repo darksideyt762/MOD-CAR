@@ -8,7 +8,7 @@ fi
 # Change to the repository directory
 cd $HOME/MOD-CAR
 
-# Make sure the script is executable
+# Make sure the car script is executable
 chmod +x car
 
 # Create a symbolic link for the script to be accessible globally as "car"
@@ -22,7 +22,10 @@ if [ ! -f "$HOME/MOD-CAR/cars.txt" ] || [ ! -f "$HOME/MOD-CAR/default.txt" ]; th
   exit 1
 fi
 
-# Make the symbolic link executable
+# Ensure the symbolic link is executable
 chmod +x /data/data/com.termux/files/usr/bin/car
+
+# Adjust permissions for the entire /data/data/com.termux/files/usr/bin directory (if necessary)
+chmod 755 /data/data/com.termux/files/usr/bin
 
 echo "Setup completed successfully! You can now run the script by typing 'car'."
