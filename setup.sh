@@ -2,14 +2,17 @@
 
 # Ensure the repository directory exists
 if [ ! -d "$HOME/MOD-CAR" ]; then
-  echo "Error: MOD-CAR repository not found. Please clone the repository and try again."
-  exit 1
+  echo "Cloning the MOD-CAR repository..."
+  git clone https://github.com/darksideyt762/MOD-CAR.git "$HOME/MOD-CAR"
+else
+  echo "Updating the MOD-CAR repository..."
+  cd "$HOME/MOD-CAR" || { echo "Failed to navigate to MOD-CAR directory."; exit 1; }
+  git reset --hard HEAD  # Reset any local changes
+  git pull origin main   # Pull the latest updates
 fi
 
-# Navigate to the repository directory
-cd "$HOME/MOD-CAR" || { echo "Failed to navigate to MOD-CAR directory."; exit 1; }
-
 # Ensure cars.txt and default.txt are in the repository
+cd "$HOME/MOD-CAR" || { echo "Failed to navigate to MOD-CAR directory."; exit 1; }
 if [ ! -f "cars.txt" ] || [ ! -f "default.txt" ]; then
   echo "Error: cars.txt or default.txt are missing in the repository."
   exit 1
