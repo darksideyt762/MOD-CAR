@@ -1,31 +1,38 @@
 #!/bin/bash
 
-# Clone the repository if not already cloned
-if [ ! -d "$HOME/MOD-CAR" ]; then
-  git clone https://github.com/darksideyt762/MOD-CAR.git $HOME/MOD-CAR
-fi
+# Remove old installation
+rm -rf ~/MOD-CAR
+rm -f /data/data/com.termux/files/usr/bin/CAR
+
+# Clone the repository fresh
+git clone https://github.com/darksideyt762/MOD-CAR.git ~/MOD-CAR
 
 # Change to the repository directory
-cd $HOME/MOD-CAR
+cd ~/MOD-CAR
 
-# Make sure the car script is executable
+# Make sure the main script is executable
 chmod +x car
 
-# Create a symbolic link for the script to be accessible globally as "car"
-if [ ! -L "/data/data/com.termux/files/usr/bin/car" ]; then
-  ln -s $HOME/MOD-CAR/car /data/data/com.termux/files/usr/bin/car
-fi
+# Create a symbolic link for the script to be accessible globally as "CAR"
+ln -sf ~/MOD-CAR/car /data/data/com.termux/files/usr/bin/CAR
 
-# Ensure cars.txt and default.txt are in the same directory as the script
-if [ ! -f "$HOME/MOD-CAR/cars.txt" ] || [ ! -f "$HOME/MOD-CAR/default.txt" ]; then
+# Ensure cars.txt and default.txt are in the repository
+if [ ! -f "cars.txt" ] || [ ! -f "default.txt" ]; then
   echo "Error: cars.txt or default.txt are missing in the repository."
   exit 1
 fi
 
-# Ensure the symbolic link is executable
-chmod +x /data/data/com.termux/files/usr/bin/car
+echo "Setup completed successfully! You can now run the script by typing 'CAR'."
 
-# Adjust permissions for the entire /data/data/com.termux/files/usr/bin directory (if necessary)
-chmod 755 /data/data/com.termux/files/usr/bin
+# Add an updater function to fetch the latest cars.txt and default.txt
+cat << 'EOF' > /data/data/com.termux/files/usr/bin/update_car_files
+#!/bin/bash
+cd ~/MOD-CAR || { echo "MOD-CAR directory not found!"; exit 1; }
+git pull origin main
+echo "Files updated successfully!"
+EOF
 
-echo "Setup completed successfully! You can now run the script by typing 'car'."
+# Make the updater executable
+chmod +x /data/data/com.termux/files/usr/bin/update_car_files
+
+echo "You can update cars.txt and default.txt anytime by typing 'update_car_files'."
