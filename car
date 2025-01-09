@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys
+import subprocess
 
 def print_rainbow_text(text):
     """Print text with rainbow colors."""
@@ -47,8 +48,13 @@ def display_menu():
 def handle_telegram():
     """Handle redirect to Telegram."""
     print("Redirecting to Telegram channel...")
-    import webbrowser
-    webbrowser.open("https://t.me/+tV1lyZAabXdkNzQ1")  # Opens the Telegram link in a browser
+    url = "https://t.me/+tV1lyZAabXdkNzQ1"
+    
+    # Try to open the link in Chrome directly (ensure Chrome is installed and accessible)
+    try:
+        subprocess.run(["am", "start", "-a", "android.intent.action.VIEW", "-d", url], check=True)
+    except Exception as e:
+        print(f"Failed to open URL in Chrome: {e}")
 
 def get_file_path(file_name):
     """Determine the path to a file dynamically."""
