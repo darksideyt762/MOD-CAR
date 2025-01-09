@@ -2,12 +2,6 @@
 
 echo "Setting up the Modding Tool..."
 
-# Get the directory where the setup script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Change to that directory
-cd "$SCRIPT_DIR"
-
 # Check if the 'car' executable exists
 if [ ! -f "car" ]; then
     echo "Error: The 'car' executable is missing. Please ensure it is in the same directory as this setup file."
