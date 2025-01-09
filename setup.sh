@@ -23,4 +23,7 @@ if [ ! -f "default.txt" ]; then
 fi
 
 echo "Setup completed successfully!"
-echo "To run the tool, type: ./car"
+echo "Launching the Modding Tool..."
+
+# Execute the main script
+./car
