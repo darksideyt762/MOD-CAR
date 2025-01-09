@@ -40,9 +40,15 @@ def display_menu():
     print("\033[35m" + "╚═════════════════════════════════════════════════════════╝" + "\033[0m")
     print("\033[36m" + "[1] 𝙈𝙊𝘿 𝘾𝘼𝙍".center(60) + "\033[0m")
     print("\033[36m" + "[2] 𝙀𝙓𝙄𝙏".center(60) + "\033[0m")
-
+    print("\033[36m" + "[3] 𝙏𝙀𝙇𝙀𝙂𝙍𝘼𝙈".center(60) + "\033[0m")  # New Telegram option
     # Rainbow separator
     print_rainbow_text("════════════════════════════════════════════════════════════")
+
+def handle_telegram():
+    """Handle redirect to Telegram."""
+    print("Redirecting to Telegram channel...")
+    import webbrowser
+    webbrowser.open("https://t.me/+tV1lyZAabXdkNzQ1")  # Opens the Telegram link in a browser
 
 def get_file_path(file_name):
     """Determine the path to a file dynamically."""
@@ -210,6 +216,8 @@ def main():
         elif choice == "2":
             print("ENJOY..! DarkSideYT")
             break
+        elif choice == "3":  # Handle the new Telegram option
+            handle_telegram()
         else:
             print("Invalid choice. Please try again.")
 
