@@ -48,7 +48,7 @@ def display_menu():
 def handle_telegram():
     """Handle redirect to Telegram."""
     print("Redirecting to Telegram channel...")
-    url = "https://t.me/+tV1lyZAabXdkNzQ1"
+    url = "https://t.me/+Gbtl0WwhFOI0MTll"
     
     # Try to open the link in Chrome directly (ensure Chrome is installed and accessible)
     try:
