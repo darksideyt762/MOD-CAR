@@ -1,0 +1,217 @@
+import os
+import shutil
+import sys
+
+def print_rainbow_text(text):
+    """Print text with rainbow colors."""
+    colors = ["\033[31m", "\033[33m", "\033[32m", "\033[36m", "\033[34m", "\033[35m"]
+    for i, char in enumerate(text):
+        print(colors[i % len(colors)] + char, end="")
+    print("\033[0m")
+
+def display_menu():
+    """Display the ASCII menu with colorful text."""
+    os.system('cls' if os.name == 'nt' else 'clear')  # Clear the screen
+
+    # Boxed title with ASCII art
+    print("\033[34m" + "╔═════════════════════════════════════════════════════════╗" + "\033[0m")
+    print("\033[34m" + "║" + "██████╗░░██████╗██╗░░░██╗████████╗".center(53) + "║" + "\033[0m")
+    print("\033[34m" + "║" + "██╔══██╗██╔════╝╚██╗░██╔╝╚══██╔══╝".center(53) + "║" + "\033[0m")
+    print("\033[34m" + "║" + "██║░░██║╚█████╗░░╚████╔╝░░░░██║░░░".center(53) + "║" + "\033[0m")
+    print("\033[37m" + "║" + "██║░░██║░╚═══██╗░░╚██╔╝░░░░░██║░░░".center(53) + "║" + "\033[0m")
+    print("\033[37m" + "║" + "██████╔╝██████╔╝░░░██║░░░░░░██║░░░".center(53) + "║" + "\033[0m")
+    print("\033[37m" + "║" + "╚═════╝░╚═════╝░░░░╚═╝░░░░░░╚═╝░░░".center(53) + "║" + "\033[0m")
+    print("\033[37m" + "╚═════════════════════════════════════════════════════════╝" + "\033[0m")
+
+    # Rainbow separator
+    print_rainbow_text("════════════════════════════════════════════════════════════")
+
+    # Boxed author info
+    print("\033[32m" + "╔═════════════════════════════════════════════════════════╗" + "\033[0m")
+    print("\033[32m" + "║" + " MADE BY: @DARKSIDE_YT786       ".center(53) + "║" + "\033[0m")
+    print("\033[32m" + "╚═════════════════════════════════════════════════════════╝" + "\033[0m")
+    print("                     CAR MODDING TOOL")
+    # Rainbow separator
+    print_rainbow_text("════════════════════════════════════════════════════════════")
+
+    # Boxed menu options
+    print("\033[35m" + "╔═════════════════════════════════════════════════════════╗" + "\033[0m")
+    print("\033[35m" + "║" + " 👇 YOUR OPTIONS MENU LIST 👇".center(53) + "║" + "\033[0m")
+    print("\033[35m" + "╚═════════════════════════════════════════════════════════╝" + "\033[0m")
+    print("\033[36m" + "[1] 𝙈𝙊𝘿 𝘾𝘼𝙍".center(60) + "\033[0m")
+    print("\033[36m" + "[2] 𝙀𝙓𝙄𝙏".center(60) + "\033[0m")
+
+    # Rainbow separator
+    print_rainbow_text("════════════════════════════════════════════════════════════")
+
+def get_file_path(file_name):
+    """Determine the path to a file dynamically."""
+    base_dir = os.path.dirname(os.path.abspath(__file__))  # Script directory
+    file_path = os.path.join(base_dir, file_name)
+
+    if not os.path.exists(file_path):
+        print(f"\033[31mError: {file_name} not found in {base_dir}\033[0m")
+        sys.exit(1)  # Exit if the file is missing
+
+    return file_path
+
+def load_data(file_path):
+    """Load data from a text file in the format of cars.txt or default.txt."""
+    data_dict = {}
+    current_key = None
+    values = []
+
+    try:
+        with open(file_path, 'r') as file:
+            for line in file:
+                line = line.strip()
+                if not line:
+                    continue
+
+                if line.isupper():  # New section name (assumed to be uppercase)
+                    if current_key:
+                        data_dict[current_key] = values  # Add previous key to the dictionary
+                    current_key = line
+                    values = []
+                else:
+                    name, hex_value = line.split(',', 1)
+                    name = name.strip()
+                    hex_value = hex_value.strip()
+                    values.append((name, hex_value))
+
+            # Add the last key after finishing the loop
+            if current_key:
+                data_dict[current_key] = values
+
+        return data_dict
+    except Exception as e:
+        print(f"Error reading data file: {e}")
+        return {}
+
+def select_option(options_dict, prompt):
+    """Display options and allow the user to select one."""
+    print(f"\n{prompt}:")
+    keys = list(options_dict.keys())
+    for i, key in enumerate(keys, 1):
+        print(f"[{i}] {key}")
+    
+    try:
+        choice = int(input(f"Select an option [1-{len(keys)}]: ").strip())
+        if 1 <= choice <= len(keys):
+            selected_key = keys[choice - 1]
+            print(f"\nAvailable skins for {selected_key}:")
+            skins = options_dict[selected_key]
+            for j, (name, hex_value) in enumerate(skins, 1):
+                print(f"[{j}] {name}")
+            
+            skin_choice = int(input(f"Select a skin [1-{len(skins)}]: ").strip())
+            if 1 <= skin_choice <= len(skins):
+                selected_skin_name, selected_skin_hex = skins[skin_choice - 1]
+                return selected_key, selected_skin_hex
+            else:
+                print("Invalid skin choice. Returning to menu.")
+                return None, None
+        else:
+            print("Invalid car choice. Returning to menu.")
+            return None, None
+    except ValueError:
+        print("Invalid input. Returning to menu.")
+        return None, None
+        
+def find_and_replace_hex(file_path, target_hex, replacing_hex):
+    """Find the target hex in the file and replace it with the replacing hex."""
+    target_bytes = bytes.fromhex(target_hex)
+    replacing_bytes = bytes.fromhex(replacing_hex)
+
+    # Read the file as a mutable bytearray
+    with open(file_path, "rb") as f:
+        data = bytearray(f.read())
+
+    # Search and replace the hex
+    position = data.find(target_bytes)
+    if position != -1:
+        with open(file_path, "rb+") as f:
+            f.seek(position)
+            f.write(replacing_bytes)
+        print(f"Hex replaced: {target_hex} -> {replacing_hex} in {file_path}")
+        return True
+    else:
+        print(f"Hex {target_hex} not found in {file_path}")
+        return False
+
+def mod_car():
+    """Main car modding logic."""
+    # Paths
+    unpack_directory = "/storage/emulated/0/Download/g4pak/UNPACK/game_patch_3.5.0.19335/unpack/"
+    repack_directory = "/storage/emulated/0/Download/g4pak/UNPACK/game_patch_3.5.0.19335/repack/"
+    target_file = os.path.join(repack_directory, "04783616.uasset")
+
+    # Ensure repack directory exists
+    if not os.path.exists(repack_directory):
+        os.makedirs(repack_directory)
+
+    # Copy the target file to the repack directory if it doesn't already exist
+    source_file = os.path.join(unpack_directory, "04783616.uasset")
+    if not os.path.exists(target_file):
+        if os.path.exists(source_file):
+            shutil.copy(source_file, target_file)
+            print(f"COPIED FILE TO REPACK FOLDER")
+        else:
+            print(f"\033[31mError: Source file not found: {source_file}\033[0m")
+            return
+
+    # Load data from cars.txt
+    cars_txt_path = get_file_path("cars.txt")
+    cars_skins = load_data(cars_txt_path)
+    if not cars_skins:
+        print("No car data found.")
+        return
+
+    # Select car and skin
+    selected_car, selected_skin_hex = select_option(cars_skins, "Select a Car and Skin")
+    if not selected_car or not selected_skin_hex:
+        print("No valid car or skin selected.")
+        return
+
+    # Load data from default.txt
+    default_txt_path = get_file_path("default.txt")
+    default_skins = load_data(default_txt_path)
+    if not default_skins or selected_car not in default_skins:
+        print(f"No default skins found for {selected_car}.")
+        return
+
+    # Select default replacing skin directly
+    print(f"\nSelect a Default Replacing Skin for {selected_car}:")
+    default_skins_for_car = default_skins[selected_car]
+    for i, (name, hex_value) in enumerate(default_skins_for_car, 1):
+        print(f"[{i}] {name}")
+
+    sub_choice = int(input(f"Select an option [1-{len(default_skins_for_car)}]: ").strip())
+    if 1 <= sub_choice <= len(default_skins_for_car):
+        replacing_skin_hex = default_skins_for_car[sub_choice - 1][1]
+    else:
+        print("Invalid choice. Please try again.")
+        return
+
+    # Perform hex replacement
+    success = find_and_replace_hex(target_file, selected_skin_hex, replacing_skin_hex)
+    if success:
+        print("Hex replacement completed successfully.")
+    else:
+        print("Hex replacement failed.")
+
+def main():
+    """Main menu loop."""
+    while True:
+        display_menu()
+        choice = input("\nEnter your choice: ").strip()
+        if choice == "1":
+            mod_car()
+        elif choice == "2":
+            print("ENJOY..! DarkSideYT")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
