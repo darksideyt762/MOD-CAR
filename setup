@@ -26,4 +26,4 @@ echo "Setup completed successfully!"
 echo "Launching the Modding Tool..."
 
 # Execute the main script
-./car
+python car
