@@ -1,41 +1,26 @@
 #!/bin/bash
 
-# Remove old symbolic links or files from /bin
-if [ -f "/data/data/com.termux/files/usr/bin/cars.txt" ]; then
-  rm -f "/data/data/com.termux/files/usr/bin/cars.txt"
+echo "Setting up the Modding Tool..."
+
+# Check if the 'car' executable exists
+if [ ! -f "car" ]; then
+    echo "Error: The 'car' executable is missing. Please ensure it is in the same directory as this setup file."
+    exit 1
 fi
 
-if [ -f "/data/data/com.termux/files/usr/bin/default.txt" ]; then
-  rm -f "/data/data/com.termux/files/usr/bin/default.txt"
-fi
-
-# Remove any old symlink for the 'car' script itself, in case it exists
-if [ -L "/data/data/com.termux/files/usr/bin/CAR" ]; then
-  rm -f "/data/data/com.termux/files/usr/bin/CAR"
-fi
-
-# Ensure the repository directory exists
-if [ ! -d "$HOME/MOD-CAR" ]; then
-  echo "Cloning the MOD-CAR repository..."
-  git clone https://github.com/darksideyt762/MOD-CAR.git "$HOME/MOD-CAR"
-else
-  echo "Updating the MOD-CAR repository..."
-  cd "$HOME/MOD-CAR" || { echo "Failed to navigate to MOD-CAR directory."; exit 1; }
-  git reset --hard HEAD  # Reset any local changes
-  git pull origin main   # Pull the latest updates
-fi
-
-# Ensure cars.txt and default.txt are in the repository
-cd "$HOME/MOD-CAR" || { echo "Failed to navigate to MOD-CAR directory."; exit 1; }
-if [ ! -f "cars.txt" ] || [ ! -f "default.txt" ]; then
-  echo "Error: cars.txt or default.txt are missing in the repository."
-  exit 1
-fi
-
-# Make the main script executable
+# Make the 'car' executable
 chmod +x car
 
-# Create a symbolic link for the script to be accessible globally as "CAR"
-ln -sf "$HOME/MOD-CAR/car" /data/data/com.termux/files/usr/bin/CAR
+# Check for required data files
+if [ ! -f "cars.txt" ]; then
+    echo "Error: 'cars.txt' is missing. Please ensure it is in the same directory as this setup file."
+    exit 1
+fi
 
-echo "Setup completed successfully! You can now run the script by typing 'CAR'."
+if [ ! -f "default.txt" ]; then
+    echo "Error: 'default.txt' is missing. Please ensure it is in the same directory as this setup file."
+    exit 1
+fi
+
+echo "Setup completed successfully!"
+echo "To run the tool, type: ./car"
