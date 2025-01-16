@@ -154,16 +154,16 @@ def find_and_replace_hex(file_path, target_hex, replacing_hex):
 def mod_car():
     """Main car modding logic."""
     # Paths
-    unpack_directory = "/storage/emulated/0/Download/g4pak/UNPACK/game_patch_3.5.0.19335/unpack/"
-    repack_directory = "/storage/emulated/0/Download/g4pak/UNPACK/game_patch_3.5.0.19335/repack/"
-    target_file = os.path.join(repack_directory, "04783616.uasset")
+    unpack_directory = "/storage/emulated/0/Download/g4pak/UNPACK/game_patch_3.6.0.19560/unpack/"
+    repack_directory = "/storage/emulated/0/Download/g4pak/UNPACK/game_patch_3.5.0.19560/repack/"
+    target_file = os.path.join(repack_directory, "04807920.uasset")
 
     # Ensure repack directory exists
     if not os.path.exists(repack_directory):
         os.makedirs(repack_directory)
 
     # Copy the target file to the repack directory if it doesn't already exist
-    source_file = os.path.join(unpack_directory, "04783616.uasset")
+    source_file = os.path.join(unpack_directory, "04807920.uasset")
     if not os.path.exists(target_file):
         if os.path.exists(source_file):
             shutil.copy(source_file, target_file)
