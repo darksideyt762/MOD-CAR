@@ -155,7 +155,7 @@ def mod_car():
     """Main car modding logic."""
     # Paths
     unpack_directory = "/storage/emulated/0/Download/g4pak/UNPACK/game_patch_3.6.0.19560/unpack/"
-    repack_directory = "/storage/emulated/0/Download/g4pak/UNPACK/game_patch_3.5.0.19560/repack/"
+    repack_directory = "/storage/emulated/0/Download/g4pak/UNPACK/game_patch_3.6.0.19560/repack/"
     target_file = os.path.join(repack_directory, "04807920.uasset")
 
     # Ensure repack directory exists
